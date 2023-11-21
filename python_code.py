@@ -42,57 +42,68 @@ def validateData(data):
         raise ValueError(f"Error in element {data}: dob is not a valid date.")
     
 
-if type(data) == list:
-    for entry in data:
+def postData(data):
+    if type(data) == list:
+        for entry in data:
+            try:
+                validateData(entry)
+            except ValueError as e:
+                print(e)
+            else:
+                peopleResponse = requests.post(url, json=entry, headers=headers)
+                checkStatusCode("POST", peopleResponse.status_code, 201)
+    elif type(data) == dict:
         try:
-            validateData(entry)
+            validateData(data)
         except ValueError as e:
             print(e)
         else:
-            peopleResponse = requests.post(url, json=entry, headers=headers)
-            checkStatusCode("POST", peopleResponse.status_code, 201)
-elif type(data) == dict:
-    try:
-        validateData(data)
-    except ValueError as e:
-        print(e)
+            peopleResponse = requests.post(url, json=data, headers=headers)
+            response_data = peopleResponse.json()
+            new_id = response_data.get('id')
+            print("Newly created ID:", new_id)
     else:
-        peopleResponse = requests.post(url, json=data, headers=headers)
-        response_data = peopleResponse.json()
-        new_id = response_data.get('id')
-        print("Newly created ID:", new_id)
-else:
-    print("Cannot POST. Invalid data type.")
+        print("Cannot POST. Invalid data type.")
 
-
+# postData(data)
 
 
 
 
 # # GET REQUEST 
 
-# getURL = f"{url}/1"
-# peopleResponse = requests.get(getURL, headers=headers)
+def getData(index=None):
+    if index is not None:
+        getURL = f"{url}/{index}"
+    else:
+        getURL = f"{url}"
 
-# if checkStatusCode('GET', peopleResponse.status_code, 200):
-#     responseData = peopleResponse.json()
-#     print(json.dumps(responseData, indent=2))
+    peopleResponse = requests.get(getURL, headers=headers)
+
+    if checkStatusCode('GET', peopleResponse.status_code, 200):
+        responseData = peopleResponse.json()
+        print(json.dumps(responseData, indent=2))
+
+# getData("15")
+
 
 
 
 # # PATCH REQUEST
-# patchURL = f"{url}/21"
-# patch_data = {
-#     "fullName": "Michael Griffiths"
-# }
 
-# peopleResponse = requests.get(patchURL, headers=headers)
+def patchDataByIndex(index):
+    patchURL = f"{url}/{index}"
+    patch_data = {
+        "fullName": "Michael Griffiths"
+    }
 
-# if checkStatusCode('GET', peopleResponse.status_code, 200):
-#     peopleResponse = requests.patch(patchURL, json=patch_data, headers=headers)
-#     checkStatusCode('PATCH', peopleResponse.status_code, 200)
+    peopleResponse = requests.get(patchURL, headers=headers)
 
+    if checkStatusCode('GET', peopleResponse.status_code, 200):
+        peopleResponse = requests.patch(patchURL, json=patch_data, headers=headers)
+        checkStatusCode('PATCH', peopleResponse.status_code, 200)
 
+# patchDataByIndex("15")
 
 
 
@@ -101,19 +112,18 @@ else:
 
  
 # # DELETE REQUEST - IS IT BETTER TO CHECK IF IT IS THERE BEFORE DELETING OR RETURNING THE RESPONSE (EG SUCCESS OR FAIL?)
-# deleteURL = f"{url}/11"
+
+def deleteDataByIndex(index):
+    deleteURL = f"{url}/{index}"
+    peopleResponse = requests.get(deleteURL, headers=headers)
+    statusCode = peopleResponse.status_code
+    if checkStatusCode('GET', statusCode, 200):
+        peopleResponse = requests.delete(deleteURL, headers=headers)
+        statusCode = peopleResponse.status_code
+        checkStatusCode('DELETE', statusCode, 200)
 
 
-# peopleResponse = requests.get(deleteURL, headers=headers)
-# statusCode = peopleResponse.status_code
-
-# if checkStatusCode('GET', statusCode, 200):
-#     peopleResponse = requests.delete(deleteURL, headers=headers)
-#     statusCode = peopleResponse.status_code
-#     checkStatusCode('DELETE', statusCode, 200)
-
-
-    
+# deleteDataByIndex("4")
     
     
 
@@ -147,6 +157,14 @@ else:
 #     peopleResponse = requests.delete(deleteURL, headers=headers)
 
 
+
+
+
+
+
+
+
+
 #Task 1: Create a file in your directory containing valid JSON data for your server, import it, and send it to the API using a POST request.
 
 #Task 2: Send a get request to your API and filter the data until you find the data you posted
@@ -159,3 +177,4 @@ else:
 # import this data, remove duplicates and POST to the API
 
 #Task 6: When importing the data, add some validation to ensure the data is structured how you would expect. Correct data types, etc.
+

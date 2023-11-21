@@ -1,13 +1,6 @@
 {
   "people": [
     {
-      "id": "3",
-      "fullName": "David Miller",
-      "email": "david.miller@example.org",
-      "job": "Accountant",
-      "dob": "06/20/1975"
-    },
-    {
       "id": "4",
       "fullName": "Emma White",
       "email": "emma.white@example.net",
@@ -51,7 +44,7 @@
     },
     {
       "id": "15",
-      "fullName": "Liam Davis",
+      "fullName": "Michael Griffiths",
       "email": "liam.davis@example.org",
       "job": "IT Consultant",
       "dob": "03/30/1974"
@@ -93,7 +86,7 @@
     },
     {
       "id": "21",
-      "fullName": "Michael Griffiths",
+      "fullName": "Ben Bilgili",
       "email": "ben.bilgili@example.com",
       "job": "Test Engineer",
       "dob": "15/09/1891"
