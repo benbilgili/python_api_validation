@@ -1,4 +1,4 @@
-Python JSON API Interaction
+<h2>**Python JSON API Interaction**</h2>
 
 This Python script interacts with a JSON API to perform CRUD operations on a 'people' resource. The script uses the requests library to send HTTP requests to a local JSON server and reads data from a JSON file named test.json. The primary operations include:
 
