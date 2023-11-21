@@ -132,29 +132,38 @@ def deleteDataByIndex(index):
 
 # TASK 5
 # Extract all ids into an array
-# peopleResponse = requests.get(url, headers=headers)
-# responseData = peopleResponse.json()
- 
-# print(json.dumps(responseData, indent=2))
- 
-# id_array = [obj["id"] for obj in responseData]
 
-# print(id_array)
- 
-# seen = set()
-# duplicates = []
- 
-# for item in id_array:
-#     if item in seen:  
-#         duplicates.append(item)
-#     else:
-#         seen.add(item)
- 
-# print(duplicates)
- 
-# for item in duplicates:
-#     deleteURL = f"{url}/{item}"
-#     peopleResponse = requests.delete(deleteURL, headers=headers)
+
+def deleteDuplicates():
+    peopleResponse = requests.get(url, headers=headers)
+    responseData = peopleResponse.json()
+    
+    # print(json.dumps(responseData, indent=2))
+    
+    id_array = [obj["id"] for obj in responseData]
+
+    # print(id_array)
+    
+    seen = set()
+    duplicates = []
+    
+    for item in id_array:
+        if item in seen:  
+            duplicates.append(item)
+        else:
+            seen.add(item)
+    
+    # print("Duplicates Found: ", duplicates)
+    
+    if len(duplicates) > 0:
+        for item in duplicates:
+            deleteURL = f"{url}/{item}"
+            peopleResponse = requests.delete(deleteURL, headers=headers)
+    else: 
+        print("No duplicates found.")
+        
+    
+
 
 
 
@@ -178,3 +187,55 @@ def deleteDataByIndex(index):
 
 #Task 6: When importing the data, add some validation to ensure the data is structured how you would expect. Correct data types, etc.
 
+
+
+
+
+
+
+
+
+while True:
+    print("""
+    Please select an option:
+    1. Option 1 (POST DATA)
+    2. Option 2 (GET DATA)
+    3. Option 3 (PATCH DATA)
+    4. Option 4 (DELETE DATA)
+    5. Option 5 (REMOVE DUPLICATES)
+    6. Exit
+    """)
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        print("You selected Option 1.")
+        postData(data)
+        
+    elif choice == "2":
+        print("You selected Option 2.")
+        index = input("Enter the index of data required. Alternatively, enter nothing to get all data back: ")
+        getData(index)
+        
+    elif choice == "3":
+        print("You selected Option 3.")
+        index = input("Enter the index of data to patch: ") # we could ask what info to change and to what (if we had time)
+        if index:
+            patchDataByIndex(index)
+        else: 
+            print("No index supplied, please try again.")
+        
+    elif choice == "4":
+        print("You selected Option 4.")
+        index = input("Enter the index of data to delete: ")
+        deleteDataByIndex(index)
+        
+    elif choice == "5":
+        print("You selected Option 5.")
+        deleteDuplicates()
+        
+    elif choice == "6":
+        print("Exiting the program.")
+        break
+    else:
+        print("Invalid choice. Please try again.")
